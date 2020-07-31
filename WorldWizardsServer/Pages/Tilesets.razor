@@ -1,0 +1,27 @@
+﻿@page "/tilesets"
+
+
+<h1>Tilesets</h1>
+<ul class="list-group">
+@foreach(string tilesetName in TilesetNames)
+{
+    <li class="list-group-item">@tilesetName</li>
+}
+</ul>
+
+@using System.IO;
+@code {
+    private const string TILESETDIR="./data/tilesets";
+    private string[] TilesetNames;
+
+
+    protected override void OnInitialized(){
+        if (!Directory.Exists(TILESETDIR))
+        {
+            Directory.CreateDirectory(TILESETDIR);
+        }
+        TilesetNames = Directory.GetFiles(TILESETDIR);
+        // test
+        //TilesetNames = new string[] { "foo", "bar" };
+    }
+} 
