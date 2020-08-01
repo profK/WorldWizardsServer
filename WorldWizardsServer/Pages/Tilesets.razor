@@ -3,19 +3,24 @@
 
 <h1>Tilesets</h1>
 <ul class="list-group">
-@foreach(string tilesetName in TilesetNames)
-{
-    <li class="list-group-item">@tilesetName</li>
-}
+    @foreach (string tilesetName in TilesetNames)
+    {
+        <li class="list-group-item">@tilesetName</li>
+    }
 </ul>
+
+<SfUploader>
+    <UploaderEvents ValueChange="OnChange"></UploaderEvents>
+</SfUploader>
 
 @using System.IO;
 @code {
-    private const string TILESETDIR="./data/tilesets";
+    private const string TILESETDIR = "./data/tilesets";
     private string[] TilesetNames;
 
 
-    protected override void OnInitialized(){
+    protected override void OnInitialized()
+    {
         if (!Directory.Exists(TILESETDIR))
         {
             Directory.CreateDirectory(TILESETDIR);
@@ -24,4 +29,17 @@
         // test
         //TilesetNames = new string[] { "foo", "bar" };
     }
-} 
+
+    private void OnChange(UploadChangeEventArgs args)
+    {
+        Console.WriteLine(">>>OnChange");
+        foreach (var file in args.Files)
+        {
+            var path = TILESETDIR + "/" + file.FileInfo.Name;
+            FileStream filestream = new FileStream(path, FileMode.Create, FileAccess.Write);
+            file.Stream.WriteTo(filestream);
+            filestream.Close();
+            file.Stream.Close();
+        }
+    }
+}

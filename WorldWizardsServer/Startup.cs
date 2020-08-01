@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WorldWizardsServer.Areas.Identity;
 using WorldWizardsServer.Data;
+using Syncfusion.Blazor;
 
 namespace WorldWizardsServer
 {
@@ -31,6 +32,7 @@ namespace WorldWizardsServer
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+			services.AddSyncfusionBlazor();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -47,11 +49,17 @@ namespace WorldWizardsServer
                 googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
                 googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
             });
+            // Blazor
+            services.AddSyncfusionBlazor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //regtister SF License
+            //Register Syncfusion license
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mjk3NTk3QDMxMzgyZTMyMmUzMENReDIxazNndzk0UElQMFNFMVJVMWVpVkpRR0NKbGdpSktQQ2s2Mmhma009");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
