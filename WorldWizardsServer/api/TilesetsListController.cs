@@ -1,8 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WorldWizardsServer.Pages;
+using System.Text.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,7 +19,9 @@ namespace WorldWizardsServer.api
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            return new string[] { "value1", "value2" };
+            // list files
+            string[] tilesetnames = Directory.GetFiles(Tilesets.TILESETDIR);
+            return new string[] { JsonSerializer.Serialize(tilesetnames) };
         }
 
         // GET api/<TilesetsListController>/5
