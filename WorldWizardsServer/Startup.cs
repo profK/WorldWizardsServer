@@ -41,8 +41,7 @@ namespace WorldWizardsServer
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-            services.AddSingleton<WeatherForecastService>();
-
+          
             //Google auth
             services.AddAuthentication().AddGoogle(googleOptions =>
             {
@@ -72,13 +71,16 @@ namespace WorldWizardsServer
                 app.UseHsts();
             }
 
+            app.UseCors(policy => policy.AllowAnyOrigin());
+
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+            //app.UseAuthentication();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -86,6 +88,8 @@ namespace WorldWizardsServer
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+
+           
         }
     }
 }

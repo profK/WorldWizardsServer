@@ -15,13 +15,18 @@ namespace WorldWizardsServer.Pages
 
         public void OnGet()
         {
-            
-     
+
             if (!Directory.Exists(TILESETDIR))
             {
                 Directory.CreateDirectory(TILESETDIR);
             }
-            TilesetNames = Directory.GetFiles(TILESETDIR);
+            string[] fullnames = Directory.GetDirectories(TILESETDIR);
+            List<string> tilesetList = new List<string>();
+            foreach (string fullname in fullnames)
+            {
+                tilesetList.Add(Path.GetFileName(fullname));
+            }
+            TilesetNames = tilesetList.ToArray();
         }
     }
 }

@@ -1,0 +1,7 @@
+ManifestFileVersion: 0
+CRC: 2927695036
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: tileset_dungeon
+      Dependencies: {}

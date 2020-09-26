@@ -21,13 +21,18 @@
 
     protected override void OnInitialized()
     {
+
         if (!Directory.Exists(TILESETDIR))
         {
             Directory.CreateDirectory(TILESETDIR);
         }
-        TilesetNames = Directory.GetFiles(TILESETDIR);
-        // test
-        //TilesetNames = new string[] { "foo", "bar" };
+        string[] fullnames = Directory.GetDirectories(TILESETDIR);
+        List<string> tilesetList = new List<string>();
+        foreach (string fullname in fullnames)
+        {
+            tilesetList.Add(Path.GetFileName(fullname));
+        }
+        TilesetNames = tilesetList.ToArray();
     }
 
     private void OnChange(UploadChangeEventArgs args)
