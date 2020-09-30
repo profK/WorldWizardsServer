@@ -37,7 +37,7 @@ namespace WorldWizardsServer.api
             }
             foreach(KeyValuePair<Guid,String> tuple in tilesetIDs)
             {
-                tlist.Add(new TilesetInfo(tuple.Value));
+                tlist.Add(new TilesetInfo(tuple.Value,tuple.Key));
             }
             return JsonConvert.SerializeObject(tlist);
         }

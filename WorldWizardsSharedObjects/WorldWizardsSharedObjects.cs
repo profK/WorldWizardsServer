@@ -10,11 +10,11 @@ namespace WorldWizardsSharedObjects
     [Serializable]
     public class TilesetInfo
     {
-        //public Guid Guid;
+        public Guid Guid;
         public string Path;
-        public TilesetInfo(string path)
+        public TilesetInfo(string path,Guid guid)
         {
-           // Guid = guid;
+            Guid = guid;
             Path = path;
         }
     }
