@@ -23,7 +23,7 @@ namespace WorldWizardsServer.api
         public FileStream Get(string platform, string tileset, int version)
         {
             //NOTE: Version currently unimplemented
-            var path = Tilesets.TILESETDIR + "/" + tileset + "/" + platform + "/tileset_" + tileset.ToLower();
+            var path = Tilesets.TILESETDIR + "/" + tileset + "/" + platform + "/" + tileset.ToLower()+"/tiles";
             return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
 

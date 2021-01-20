@@ -22,6 +22,7 @@
     <PackageReference Include="Syncfusion.Blazor.WordProcessor" Version="18.2.0.47" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />
+   
   </ItemGroup>
 
   <ItemGroup>
@@ -29,40 +30,33 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Data\tilesets\Dungeon\Android\Android">
+    <None Update="Data\tilesets\dungeon01\Android\Android">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Data\tilesets\Dungeon\Android\tileset_dungeon">
+    <None Update="Data\tilesets\dungeon01\Android\dungeon01\tiles">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Data\tilesets\Dungeon\Linux64\Linux64">
+    <None Update="Data\tilesets\dungeon01\WebGL\dungeon01\tiles">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Data\tilesets\Dungeon\Linux64\tileset_dungeon">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\tilesets\Dungeon\OSX\OSX">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\tilesets\Dungeon\OSX\tileset_dungeon">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\tilesets\Dungeon\WebGL\tileset_dungeon">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\tilesets\Dungeon\WebGL\WebGL">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\tilesets\Dungeon\Windows64\tileset_dungeon">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\tilesets\Dungeon\Windows64\Windows64">
+    <None Update="Data\tilesets\dungeon01\WebGL\WebGL">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\tilesets\" />
+    <Content Update="wwwroot\client\Build\client.data">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\client\Build\client.wasm">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
+
+ 
 
 </Project>

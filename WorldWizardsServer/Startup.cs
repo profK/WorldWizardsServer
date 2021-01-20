@@ -8,10 +8,13 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using WorldWizardsServer.Areas.Identity;
 using WorldWizardsServer.Data;
@@ -24,6 +27,7 @@ namespace WorldWizardsServer
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+        
         }
 
         public IConfiguration Configuration { get; }
@@ -75,7 +79,12 @@ namespace WorldWizardsServer
 
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            //app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                ServeUnknownFileTypes = true,
+                DefaultContentType = "application/octet-stream"
+            });
 
             app.UseRouting();
 
