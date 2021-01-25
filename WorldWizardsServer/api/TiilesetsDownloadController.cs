@@ -20,10 +20,10 @@ namespace WorldWizardsServer.api
     {
         // GET: api/<TiilesetsDownloadController>
         [HttpGet]
-        public FileStream Get(string platform, string tileset, int version)
+        public FileStream Get(string platform, string tileset, string subpath, int version)
         {
             //NOTE: Version currently unimplemented
-            var path = Tilesets.TILESETDIR + "/" + tileset + "/" + platform + "/" + tileset.ToLower()+"/tiles";
+            var path = Tilesets.TILESETDIR + "/" + tileset + "/" + platform + "/" + subpath;
             return new FileStream(path, FileMode.Open, FileAccess.Read);
         }
 

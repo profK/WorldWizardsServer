@@ -21,7 +21,7 @@ namespace WorldWizardsServer.api
 
         // GET api/tilesets/manifest?platform=" + platform + "&tileset=" + tilesetName + "&version=" + version;
         //[HttpGet("{platform},{tileset},{version}")]
-        public FileStream Get(string platform,string tileset,int version)
+        public FileStream Get(string platform,string tileset, int version)
         {
             //NOTE: Version currently unimplemented
           
