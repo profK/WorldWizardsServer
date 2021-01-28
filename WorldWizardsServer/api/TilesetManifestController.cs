@@ -25,7 +25,7 @@ namespace WorldWizardsServer.api
         {
             //NOTE: Version currently unimplemented
           
-            var path = Tilesets.TILESETDIR+"/"+tileset + "/" + platform + "/" + platform;
+            var path = Tilesets.TILESETDIR+"/" + tileset + "/"+platform+"/"+platform;
             return new FileStream(path, FileMode.Open, FileAccess.Read);
             //turn MakeStreamResponse(path);
         }

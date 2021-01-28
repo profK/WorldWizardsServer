@@ -30,18 +30,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Data\tilesets\dungeon01\Android\Android">
+    <Content Include="Data\tilesets\**\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\tilesets\dungeon01\Android\dungeon01\tiles">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\tilesets\dungeon01\WebGL\dungeon01\tiles">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\tilesets\dungeon01\WebGL\WebGL">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
