@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Ionic.Zip;
 using Microsoft.AspNetCore.Mvc;
 using WorldWizardsServer.Pages;
 using Newtonsoft.Json;
@@ -26,13 +27,32 @@ namespace WorldWizardsServer.api
         public string Get()
         {
             // list files
-            string[] tilesetnames = Directory.GetDirectories(Tilesets.TILESETDIR);
+            // currently lists all tiles and such on the server
+            // in the futue will apply ownership
+            string[] tilesetnames = Directory.GetFiles(Tilesets.TILESETDIR,"*.zip");
             List<TilesetInfo> tlist = new List<TilesetInfo>();
             foreach(string tname in tilesetnames)
             {
-                if (!tilesetIDs.ContainsValue(tname))
+                using (ZipInputStream zip = new ZipInputStream(tname))
                 {
-                    tilesetIDs.Add(key: Guid.NewGuid(), value: Path.GetFileName(tname));
+                    ZipEntry entry = zip.GetNextEntry();
+                    bool foundIdx = false;
+                    while (!foundIdx){
+                        if (entry.FileName.EndsWith(".idx"))
+                        {
+                            foundIdx = true;
+                        }
+                        else
+                        {
+                            entry = zip.GetNextEntry();
+                        }
+                    } 
+                    // did we find an index?
+                    if (foundIdx)
+                    {
+                        
+                    }
+                    
                 }
             }
             foreach(KeyValuePair<Guid,String> tuple in tilesetIDs)

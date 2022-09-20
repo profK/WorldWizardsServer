@@ -48,6 +48,10 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\Tilesets" />
+  </ItemGroup>
+
  
 
 </Project>
