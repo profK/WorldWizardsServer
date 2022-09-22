@@ -6,16 +6,44 @@ using System.Text;
 
 namespace WorldWizardsSharedObjects
 {
-   
     [Serializable]
-    public class TilesetInfo
+    public abstract class AssetTreeNode
     {
-        public Guid Guid;
-        public string Path;
-        public TilesetInfo(string path,Guid guid)
+        public string Name;
+
+        public AssetTreeNode(string name)
         {
-            Guid = guid;
-            Path = path;
+            Name = name;
+        }
+
+        public AssetTreeNode()
+        {
+            
         }
     }
+
+    [Serializable]
+    public class AssetTreeDir : AssetTreeNode
+    {
+        public List<AssetTreeNode> Children;
+
+        public AssetTreeDir(string name) : base(name)
+        {
+            Children = new List<AssetTreeNode>();
+        }
+
+        public AssetTreeDir() : base()
+        {
+        }
+    }
+
+    [Serializable]
+    public class AssetTreeBundle: AssetTreeNode
+    {
+        public AssetTreeBundle(string name) : base(name)
+        {
+            
+        }
+    }
+   
 }

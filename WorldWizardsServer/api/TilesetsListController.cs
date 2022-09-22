@@ -1,9 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Ionic.Zip;
+using System.Text;
+using System.IO.Compression;
 using Microsoft.AspNetCore.Mvc;
 using WorldWizardsServer.Pages;
 using Newtonsoft.Json;
@@ -29,37 +28,28 @@ namespace WorldWizardsServer.api
             // list files
             // currently lists all tiles and such on the server
             // in the futue will apply ownership
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             string[] tilesetnames = Directory.GetFiles(Tilesets.TILESETDIR,"*.zip");
-            List<TilesetInfo> tlist = new List<TilesetInfo>();
+            List<TilesetDirIndex> indexList = new List<TilesetDirIndex>();
             foreach(string tname in tilesetnames)
             {
-                using (ZipInputStream zip = new ZipInputStream(tname))
+                string tnameFixed = tname.Replace("\\","/");
+                using (FileStream zipStream = System.IO.File.OpenRead(tnameFixed))
                 {
-                    ZipEntry entry = zip.GetNextEntry();
-                    bool foundIdx = false;
-                    while (!foundIdx){
-                        if (entry.FileName.EndsWith(".idx"))
-                        {
-                            foundIdx = true;
-                        }
-                        else
-                        {
-                            entry = zip.GetNextEntry();
-                        }
-                    } 
-                    // did we find an index?
-                    if (foundIdx)
+                    ZipArchive zip = new ZipArchive(zipStream);
+                    foreach (ZipArchiveEntry entry in zip.Entries)
                     {
-                        
+                        if (entry.Name.EndsWith(".idx"))
+                        {
+                            string idxStr = new StreamReader(entry.Open()).ReadToEnd();
+                            TilesetDirIndex idx = JsonConvert.DeserializeObject<TilesetDirIndex>(idxStr);
+                            indexList.Add(idx);
+                        }
                     }
-                    
                 }
             }
-            foreach(KeyValuePair<Guid,String> tuple in tilesetIDs)
-            {
-                tlist.Add(new TilesetInfo(tuple.Value,tuple.Key));
-            }
-            return JsonConvert.SerializeObject(tlist);
+            
+            return JsonConvert.SerializeObject(indexList);
         }
 
         // GET api/<TilesetsListController>/5
