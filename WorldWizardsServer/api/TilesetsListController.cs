@@ -3,6 +3,8 @@ using System.IO;
 using System.Collections.Generic;
 using System.Text;
 using System.IO.Compression;
+using System.Xml;
+using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.AspNetCore.Mvc;
 using WorldWizardsServer.Pages;
 using Newtonsoft.Json;
@@ -52,11 +54,39 @@ namespace WorldWizardsServer.api
             return JsonConvert.SerializeObject(indexList);
         }
 
-        // GET api/<TilesetsListController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // GET api/<TilesetsListController>/<path to bundle>
+        [HttpGet("{path}")]
+        public string Get(string path)
         {
-            return "value";
+            string bundlename = Directory.GetDirectoryRoot(path);
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            using (FileStream zipStream = System.IO.File.OpenRead(bundlename+".zip"))
+            {
+                ZipArchive zip = new ZipArchive(zipStream);
+                ZipArchiveEntry entry = zip.GetEntry("assets.manifest");
+                using (var strm = new StreamReader(entry.Open()))
+                {
+                    while (!strm.EndOfStream && (strm.ReadLine().Trim().ToUpper() != "ASSETS:")) ;
+                    bool done = false;
+                    List<string> assetList = new List<string>();
+                    while (!strm.EndOfStream && !done)
+                    {
+                        string inline = strm.ReadLine();
+                        inline = inline.Trim();
+                        if (inline[0] == '-')
+                        {
+                            string assetName = Path.GetFileName(inline.Substring(1).Trim());
+                            assetList.Add(assetName);
+                        }
+                        else
+                        {
+                            done = true;
+                        }
+                    }
+
+                    return JsonConvert.SerializeObject(assetList);
+                }
+            }
         }
 
         // POST api/<TilesetsListController>
