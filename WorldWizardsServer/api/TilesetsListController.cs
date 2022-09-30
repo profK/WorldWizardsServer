@@ -55,37 +55,17 @@ namespace WorldWizardsServer.api
         }
 
         // GET api/<TilesetsListController>/<path to bundle>
-        [HttpGet("{path}")]
-        public string Get(string path)
+        [HttpGet("manifest/{platform}/{tileset}/{path}")]
+        public Stream Get(string platform, string tileset, string path)
         {
-            string bundlename = Directory.GetDirectoryRoot(path);
+            string manifestpath = platform + "/" + path+
+                                  Path.GetFileName(path)+".manifest";
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            using (FileStream zipStream = System.IO.File.OpenRead(bundlename+".zip"))
+            using (FileStream zipStream = System.IO.File.OpenRead(tileset+".zip"))
             {
                 ZipArchive zip = new ZipArchive(zipStream);
-                ZipArchiveEntry entry = zip.GetEntry("assets.manifest");
-                using (var strm = new StreamReader(entry.Open()))
-                {
-                    while (!strm.EndOfStream && (strm.ReadLine().Trim().ToUpper() != "ASSETS:")) ;
-                    bool done = false;
-                    List<string> assetList = new List<string>();
-                    while (!strm.EndOfStream && !done)
-                    {
-                        string inline = strm.ReadLine();
-                        inline = inline.Trim();
-                        if (inline[0] == '-')
-                        {
-                            string assetName = Path.GetFileName(inline.Substring(1).Trim());
-                            assetList.Add(assetName);
-                        }
-                        else
-                        {
-                            done = true;
-                        }
-                    }
-
-                    return JsonConvert.SerializeObject(assetList);
-                }
+                ZipArchiveEntry entry = zip.GetEntry(manifestpath);
+                return entry.Open();
             }
         }
 
