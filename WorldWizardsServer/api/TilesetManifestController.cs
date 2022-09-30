@@ -1,7 +1,9 @@
 ﻿using System.IO;
+using System.IO.Compression;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using WorldWizardsServer.Pages;
 using Ionic.Zip;
@@ -19,15 +21,19 @@ namespace WorldWizardsServer.api
     {
         
 
-        // GET api/tilesets/manifest?platform=" + platform + "&tileset=" + tilesetName + "&version=" + version;
-        //[HttpGet("{platform},{tileset},{version}")]
-        public FileStream Get(string platform,string tileset, int version)
+        // GET api/<TilesetsListController>/<path to bundle>
+        [HttpGet("{platform}/{tileset}/{path}")]
+        public Stream Get(string platform, string tileset, string path)
         {
-            //NOTE: Version currently unimplemented
-          
-            var path = Tilesets.TILESETDIR+"/" + tileset + "/"+platform+"/"+platform;
-            return new FileStream(path, FileMode.Open, FileAccess.Read);
-            //turn MakeStreamResponse(path);
+            string manifestpath = platform + "/" + path+
+                                  Path.GetFileName(path)+".manifest";
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            using (FileStream zipStream = System.IO.File.OpenRead(tileset+".zip"))
+            {
+                ZipArchive zip = new ZipArchive(zipStream);
+                ZipArchiveEntry entry = zip.GetEntry(manifestpath);
+                return entry.Open();
+            }
         }
 
        

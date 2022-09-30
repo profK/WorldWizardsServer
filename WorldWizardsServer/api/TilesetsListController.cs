@@ -54,20 +54,7 @@ namespace WorldWizardsServer.api
             return JsonConvert.SerializeObject(indexList);
         }
 
-        // GET api/<TilesetsListController>/<path to bundle>
-        [HttpGet("manifest/{platform}/{tileset}/{path}")]
-        public Stream Get(string platform, string tileset, string path)
-        {
-            string manifestpath = platform + "/" + path+
-                                  Path.GetFileName(path)+".manifest";
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            using (FileStream zipStream = System.IO.File.OpenRead(tileset+".zip"))
-            {
-                ZipArchive zip = new ZipArchive(zipStream);
-                ZipArchiveEntry entry = zip.GetEntry(manifestpath);
-                return entry.Open();
-            }
-        }
+       
 
         // POST api/<TilesetsListController>
         [HttpPost]
