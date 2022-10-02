@@ -54,7 +54,19 @@ namespace WorldWizardsServer.api
             return JsonConvert.SerializeObject(indexList);
         }
 
-       
+        [HttpGet("{bundlepath}")]
+        public Stream Get(string bundlepath)
+        {
+            string pathRoot = Path.GetPathRoot(bundlepath);
+            using (FileStream zipStream = 
+                   System.IO.File.OpenRead(pathRoot+".zip"))
+            {
+                ZipArchive zip = new ZipArchive(zipStream);
+                string entryPath = bundlepath.Substring(pathRoot.Length);
+                ZipArchiveEntry entry = zip.GetEntry(entryPath);
+                return entry.Open();
+            }
+        }
 
         // POST api/<TilesetsListController>
         [HttpPost]
