@@ -54,18 +54,32 @@ namespace WorldWizardsServer.api
             return JsonConvert.SerializeObject(indexList);
         }
 
-        [HttpGet("{bundlepath}")]
+        [HttpGet("bundle")]
         public Stream Get(string bundlepath)
         {
-            string pathRoot = Path.GetPathRoot(bundlepath);
-            using (FileStream zipStream = 
-                   System.IO.File.OpenRead(pathRoot+".zip"))
+            string pathRoot = GetRootDir(bundlepath);
+            string zipPath = Tilesets.TILESETDIR + "/" + pathRoot + ".zip";
+            FileStream zipStream = 
+                   System.IO.File.OpenRead(zipPath);
+            ZipArchive zip = new ZipArchive(zipStream);
+            string entryPath = bundlepath.Substring(pathRoot.Length+1);
+            string bundleName = Path.GetFileName(entryPath);
+            ZipArchiveEntry entry = zip.GetEntry(entryPath+"/"+bundleName);
+            return entry.Open();
+        }
+
+        public static string GetRootDir( string path)
+        {
+            var root = Path.GetPathRoot(path);
+            while (true)
             {
-                ZipArchive zip = new ZipArchive(zipStream);
-                string entryPath = bundlepath.Substring(pathRoot.Length);
-                ZipArchiveEntry entry = zip.GetEntry(entryPath);
-                return entry.Open();
+                var temp = Path.GetDirectoryName(path);
+                if (temp != null && temp.Equals(root))
+                    break;
+                path = temp;
             }
+
+            return path;
         }
 
         // POST api/<TilesetsListController>
