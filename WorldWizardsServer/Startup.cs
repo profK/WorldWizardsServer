@@ -97,7 +97,8 @@ namespace WorldWizardsServer
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
-
+            
+            app.UseRequestResponseLogging();
            
         }
     }

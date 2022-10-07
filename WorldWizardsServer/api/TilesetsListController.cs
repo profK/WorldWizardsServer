@@ -57,14 +57,15 @@ namespace WorldWizardsServer.api
         [HttpGet("bundle")]
         public Stream Get(string bundlepath)
         {
+            
             string pathRoot = GetRootDir(bundlepath);
             string zipPath = Tilesets.TILESETDIR + "/" + pathRoot + ".zip";
             FileStream zipStream = 
                    System.IO.File.OpenRead(zipPath);
             ZipArchive zip = new ZipArchive(zipStream);
             string entryPath = bundlepath.Substring(pathRoot.Length+1);
-            string bundleName = Path.GetFileName(entryPath);
-            ZipArchiveEntry entry = zip.GetEntry(entryPath+"/"+bundleName);
+            string entryName = bundlepath.Substring(bundlepath.LastIndexOf("/") + 1);
+            ZipArchiveEntry entry = zip.GetEntry(entryPath+"/assets");
             return entry.Open();
         }
 
