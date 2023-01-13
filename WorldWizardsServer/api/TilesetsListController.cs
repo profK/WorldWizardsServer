@@ -82,6 +82,36 @@ namespace WorldWizardsServer.api
 
             return path;
         }
+        
+        [HttpGet("hashcode")]
+        public string GetHash(string bundlepath)
+        {
+            string pathRoot = GetRootDir(bundlepath);
+            string zipPath = Tilesets.TILESETDIR + "/" + pathRoot + ".zip";
+            FileStream zipStream =
+                System.IO.File.OpenRead(zipPath);
+            ZipArchive zip = new ZipArchive(zipStream);
+            string entryPath = bundlepath.Substring(pathRoot.Length + 1);
+            string entryName = bundlepath.Substring(bundlepath.LastIndexOf("/") + 1);
+            ZipArchiveEntry entry = zip.GetEntry(entryPath + "/"+entryName+".manifest");
+            using (Stream zipInputStream = entry.Open())
+            {
+                StreamReader rdr = new StreamReader(zipInputStream);
+                while (!rdr.EndOfStream)
+                {
+                    string line = rdr.ReadLine().Trim();
+                    if (line.StartsWith("CRC:"))
+                    {
+                        int start = line.IndexOf("CRC:") + 4;
+                        string numstr = line.Substring(start+1);
+                        ulong hash = ulong.Parse(numstr);
+                        return JsonConvert.SerializeObject(new BundleHashCode(hash));
+                    }
+                }
+            }
+
+            return JsonConvert.SerializeObject(new BundleHashCode()); // return invalid hashcode 
+        }
 
         // POST api/<TilesetsListController>
         [HttpPost]

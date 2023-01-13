@@ -45,5 +45,22 @@ namespace WorldWizardsSharedObjects
             
         }
     }
+
+    [Serializable]
+    public class BundleHashCode
+    {
+        public ulong value;
+        public bool valid;
+
+        public BundleHashCode()
+        {
+            valid = false;
+        }
+        public BundleHashCode(ulong v)
+        {
+            value = v;
+            valid = true;
+        }
+    }
    
 }
