@@ -54,19 +54,25 @@ namespace WorldWizardsServer.api
             return JsonConvert.SerializeObject(indexList);
         }
 
-        [HttpGet("bundle/{bundlepath}")]
-        public Stream Get(string dottedpath)
+        [HttpGet("{bundle}")]
+        public Stream Get(string bundlepath)
         {
-            string bundlepath = dottedpath.Replace('.', '/');
             string pathRoot = GetRootDir(bundlepath);
-            string zipPath = Tilesets.TILESETDIR + "/" + pathRoot + ".zip";
-            FileStream zipStream = 
-                   System.IO.File.OpenRead(zipPath);
+            string platform = GetRootDir(bundlepath.Substring(pathRoot.Length + 1));
+            string entryPath = bundlepath.Substring((pathRoot.Length + platform.Length + 2))
+                .Replace('\\','/');
+            string entryName = entryPath.Replace('/', '.').ToLower();
+            string zipPath = Path.Combine(Tilesets.TILESETDIR,pathRoot + ".zip");
+            FileStream zipStream =
+                System.IO.File.OpenRead(zipPath);
             ZipArchive zip = new ZipArchive(zipStream);
-            string entryPath = bundlepath.Substring(pathRoot.Length+1);
-            string entryName = bundlepath.Substring(bundlepath.LastIndexOf("/") + 1);
-            ZipArchiveEntry entry = zip.GetEntry(dottedpath+".assets");
+            //string entryPath = bundlepath.Substring(pathRoot.Length + 1);
+           
+            ZipArchiveEntry entry = zip.GetEntry(
+                platform+"/"+entryPath+"/"+entryName+".assets");
             return entry.Open();
+
+          
         }
 
         public static string GetRootDir( string path)
@@ -86,14 +92,21 @@ namespace WorldWizardsServer.api
         [HttpGet("hashcode")]
         public string GetHash(string bundlepath)
         {
+            // this is a quick kludge
+           
             string pathRoot = GetRootDir(bundlepath);
-            string zipPath = Tilesets.TILESETDIR + "/" + pathRoot + ".zip";
+            string platform = GetRootDir(bundlepath.Substring(pathRoot.Length + 1));
+            string entryPath = bundlepath.Substring((pathRoot.Length + platform.Length + 2))
+                .Replace('\\','/');
+            string entryName = entryPath.Replace('/', '.').ToLower();
+            string zipPath = Path.Combine(Tilesets.TILESETDIR,pathRoot + ".zip");
             FileStream zipStream =
                 System.IO.File.OpenRead(zipPath);
             ZipArchive zip = new ZipArchive(zipStream);
-            string entryPath = bundlepath.Substring(pathRoot.Length + 1);
-            string entryName = bundlepath.Substring(bundlepath.LastIndexOf("/") + 1);
-            ZipArchiveEntry entry = zip.GetEntry(entryPath + "/"+entryName+".manifest");
+            //string entryPath = bundlepath.Substring(pathRoot.Length + 1);
+           
+            ZipArchiveEntry entry = zip.GetEntry(
+                platform+"/"+entryPath+"/"+entryName+".assets.manifest");
             using (Stream zipInputStream = entry.Open())
             {
                 StreamReader rdr = new StreamReader(zipInputStream);
