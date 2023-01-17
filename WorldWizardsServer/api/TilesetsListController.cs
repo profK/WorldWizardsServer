@@ -54,10 +54,10 @@ namespace WorldWizardsServer.api
             return JsonConvert.SerializeObject(indexList);
         }
 
-        [HttpGet("bundle")]
-        public Stream Get(string bundlepath)
+        [HttpGet("bundle/{bundlepath}")]
+        public Stream Get(string dottedpath)
         {
-            
+            string bundlepath = dottedpath.Replace('.', '/');
             string pathRoot = GetRootDir(bundlepath);
             string zipPath = Tilesets.TILESETDIR + "/" + pathRoot + ".zip";
             FileStream zipStream = 
@@ -65,7 +65,7 @@ namespace WorldWizardsServer.api
             ZipArchive zip = new ZipArchive(zipStream);
             string entryPath = bundlepath.Substring(pathRoot.Length+1);
             string entryName = bundlepath.Substring(bundlepath.LastIndexOf("/") + 1);
-            ZipArchiveEntry entry = zip.GetEntry(entryPath+"/assets");
+            ZipArchiveEntry entry = zip.GetEntry(dottedpath+".assets");
             return entry.Open();
         }
 
